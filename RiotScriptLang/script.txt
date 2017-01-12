@@ -1,0 +1,6 @@
+print Привет!!!!!!!!!!
+print ABC def GHI jklm NOP 123456789
+print 
+print 654654654
+print
+gogobaby
