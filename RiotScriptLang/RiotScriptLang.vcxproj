@@ -150,6 +150,7 @@
     <ClCompile Include="CommandTemplate.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Script.cpp" />
+    <ClCompile Include="string_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />

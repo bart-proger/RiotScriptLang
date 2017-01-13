@@ -26,9 +26,12 @@ struct ArgType
 class CommandTemplate
 {
 public:
+	bool bad() { return bad_; }
+public:
 	CommandTemplate(string line);
 private:
 	std::vector<string> tokens_;
 	std::vector<ArgType> argsTypes_;
+	bool bad_;
 };
 
