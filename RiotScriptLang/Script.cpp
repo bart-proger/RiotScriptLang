@@ -1,13 +1,9 @@
 #include "Script.h"
 #include <fstream>
+#include "string_utils.h"
 
-// Script::Script()
-// {
-// }
-// 
-// Script::~Script()
-// {
-// }
+
+std::vector<CommandTemplate> Script::templates;
 
 bool Script::loadFromFile(string fileName)
 {
@@ -32,4 +28,27 @@ void Script::run()
 	{
 		cmd.execute();
 	}
+}
+
+bool Script::loadCommandTemplates(string fileName)
+{
+	templates.clear();
+
+	std::ifstream f(fileName);
+	string line;
+	while (std::getline(f, line))
+	{
+		string_trim(line, " ");
+		if (line.empty())
+			continue;
+		CommandTemplate tmp(line);
+		templates.push_back(tmp);
+	}
+
+	return true;
+}
+
+void Script::freeCommandTemplates()
+{
+	templates.clear();
 }

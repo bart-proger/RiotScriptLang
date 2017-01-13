@@ -8,7 +8,7 @@ class Command
 public:
 	struct FuncArg
 	{
-		enum ArgType { NONE = 0, BOOL, INT, FLOAT, TEXT,/* LIST*/ };
+		enum ArgType { NONE = 0, BOOL, INT, FLOAT, TEXT, ENUM }; //LIST - список аргументов
 		ArgType type;
 		string value;
 		union
@@ -16,7 +16,7 @@ public:
 			int intValue;
 			float floatValue;
 			bool boolValue;
-			/*long list*/ //TODO: списки значений
+			long enumValueNum;
 		};
 
 		FuncArg() : type(NONE), value(""), intValue(0) 

@@ -1,2 +1,9 @@
-print %
-TEXT
+      
+script [TEXT]
+print [LIST]
+if [BOOL] then
+elseif [BOOL]
+else
+endif
+rand [INT=0:100]
+color [ENUM=Red,Green,Blue,Yellow,White,Black]

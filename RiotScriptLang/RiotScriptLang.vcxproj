@@ -147,12 +147,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Command.cpp" />
+    <ClCompile Include="CommandTemplate.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Script.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
+    <ClInclude Include="CommandTemplate.h" />
     <ClInclude Include="Script.h" />
+    <ClInclude Include="string_utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="commands.txt" />

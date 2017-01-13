@@ -11,6 +11,8 @@ int main(int argc, char *argv[])
 	std::cout << "Run script file>: ";
 	std::cout << "script.txt";
 
+	Script::loadCommandTemplates("commands.txt");
+
 	while (_getch() == 13)
 	{
 		std::cout << "\n\n";
