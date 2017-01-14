@@ -15,58 +15,75 @@ CommandTemplate::CommandTemplate(string line):
 
 	if (!parseCmdTemplate(ss))
 	{
-		std::cerr << "[Error] Неверный формат шаблона команды! " << error << std::endl;
+		std::cerr << "[Error] " << error << std::endl;
 		bad_ = true;
 	}
+#ifdef _DEBUG
 	else
 	{
-		std::cout << "\n---tokens:\n";
-		for (auto tok: tokens_)
-		{
-			std::cout << tok << "\n";
-		}
+		std::cout << "\n---template:\n  \"" << template_ << "\"\n";
 		std::cout << "---types:\n";
 		for (auto typ : argsTypes_)
 		{
 			std::cout << STD_TYPE_NAMES[typ.type];
 			if (typ.bounded)
-				std::cout << " (" << typ.intMin << "..." << typ.intMax << ")";
+			{
+				if (typ.type == INT)
+					std::cout << " (" << typ.intMin << " to " << typ.intMax << ")";
+				else if (typ.type == FLOAT)
+					std::cout << " (" << typ.floatMin << " to " << typ.floatMax << ")";
+			}
+
+			if (typ.type == ENUM)
+			{
+				std::cout << " = ";
+				for (const auto& ev : typ.enumValues)
+				{
+					std::cout << "'" << ev << "'";
+				}
+				std::cout << ";";
+			}
+
 			std::cout << std::endl;
 		}
 	}
+#endif
 }
 
 bool CommandTemplate::parseCmdTemplate(std::stringstream& ss)
 {
 	char c;
-	string token = "";
 	for (;;)
 	{
 		c = ss.get();
 		if (ss.eof())
-		{
-			tokens_.push_back(token); //FIX: дублирование последнего токена
 			break;
-		}
 		
-		if (isalpha(c) || c == ' ')
+		if (isalpha((unsigned char)c) || c == ' ')
 		{
-			token += c;
+			template_ += c;
 		}
 		else if (c == '[')
 		{
-			tokens_.push_back(token);
 			if (!parseArgType(ss))
 				return false;
-			if (ss.get() != ']')
+			else
+				template_ += '*';
+			c = ss.get();
+			if (ss.eof())
 			{
-				error = "Не найден символ ']'.";
+				error = "Неожиданный конец шаблона!";
+				return false;
+			}
+			if (c != ']')
+			{
+				error = "Ожидается символ ']'.";
 				return false;
 			}
 		}
 		else
 		{
-			error = "Недопустимый символ '" + string{c} + "'.";
+			error = "Недопустимый символ '" + string{c} + "' в имени команды.";
 			return false;
 		}
 	}
@@ -80,7 +97,12 @@ bool CommandTemplate::parseArgType(std::stringstream& ss)
 	for (;;)
 	{
 		c = ss.get();
-		if (isalpha(c))
+		if (ss.eof())
+		{
+			error = "Неожиданный конец шаблона!";
+			return false;
+		}
+		if (isalpha((unsigned char)c))
 		{
 			typeName += c;
 		}
@@ -106,10 +128,13 @@ bool CommandTemplate::parseArgType(std::stringstream& ss)
 				switch (type)
 				{
 					case StdType::INT:
-						if (!parseIntRange(ss))
-							return false;
-						else
-							return true;
+						return parseIntRange(ss);
+						break;
+					case StdType::FLOAT:
+						return parseFloatRange(ss);
+						break;
+					case StdType::ENUM:
+						return parseEnumValues(ss);
 						break;
 					default:
 						error = "Тип \"" + typeName + "\" не имеет дополнительных свойств.";
@@ -119,9 +144,14 @@ bool CommandTemplate::parseArgType(std::stringstream& ss)
 			}
 			else 
 			{
+				if (type == StdType::ENUM)
+				{
+					error = "Тип ENUM должен содержать значения.";
+					return false;
+				}
 				ss.putback(c);
 				ArgType at;
-				at.type = INT;
+				at.type = static_cast<StdType>(type);
 				at.bounded = false;
 				argsTypes_.push_back(at);
 				return true;
@@ -138,12 +168,73 @@ bool CommandTemplate::parseIntRange(std::stringstream& ss)
 	if ((ss >> min) && ss.get() == ':' && (ss >> max))
 	{
 		ArgType at;
-		at.type = INT;
+		at.type = StdType::INT;
 		at.bounded = true;
 		at.intMin = min;
 		at.intMax = max;
 		argsTypes_.push_back(at);
 		return true;
 	}
+	error = "Некорректный диапазон INT значений.";
 	return false;
+}
+
+bool CommandTemplate::parseFloatRange(std::stringstream& ss)
+{
+	float min, max;
+	if ((ss >> min) && ss.get() == ':' && (ss >> max))
+	{
+		ArgType at;
+		at.type = StdType::FLOAT;
+		at.bounded = true;
+		at.floatMin = min;
+		at.floatMax = max;
+		argsTypes_.push_back(at);
+		return true;
+	}
+	error = "Некорректный диапазон FLOAT значений.";
+	return false;
+}
+
+bool CommandTemplate::parseEnumValues(std::stringstream& ss)
+{
+	char c;
+	string value = "";
+
+	ArgType at;
+	at.type = StdType::ENUM;
+
+	for (;;)
+	{
+		c = ss.get();
+		if (ss.eof())
+		{
+			error = "Неожиданный конец шаблона!";
+			return false;
+		}
+		if (isalnum((unsigned char)c))
+		{
+			value += c;
+		}
+		else
+		{
+			if (value != "")
+			{
+				at.enumValues.push_back(value);
+				value = "";
+			}
+			else
+			{
+				error = "Пропущено значение ENUM.";
+				return false;
+			}
+			if (c != ',')
+			{
+				ss.putback(c);
+				break;
+			}
+		}
+	}
+	argsTypes_.push_back(at);
+	return true;
 }

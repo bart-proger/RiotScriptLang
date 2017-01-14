@@ -36,8 +36,10 @@ public:
 	bool parseCmdTemplate(std::stringstream& ss);
 	bool parseArgType(std::stringstream& ss);
 	bool parseIntRange(std::stringstream& ss);
+	bool parseFloatRange(std::stringstream& ss);
+	bool parseEnumValues(std::stringstream& ss);
 private:
-	std::vector<string> tokens_;
+	string template_;
 	std::vector<ArgType> argsTypes_;
 	bool bad_;
 };

@@ -1,9 +1,21 @@
-
-rand [INT=0:100]
-script [TEXT]
-print [LIST]
-if [BOOL] then
-elseif [BOOL]
-else
-endif
+установить день недели [ENUM=Понедельник,Вторник,Среда,Четверг,Пятница,Суббота
+,Воскресенье]
+привет кириллица [ENUM=русский]
+[qwerty
+здоровье [INT
+9spawn [ENUM=Player,Enemy,Boss] at [FLOAT][FLOAT][FLOAT]
+hit [ENUM=Player,Enemy,Boss] by [INT] points
+rand [INT=йй:100ю]
+rotate [FLOAT=-3.14:3.14]
+script [=
+print LIST]
+if ] then
 color [ENUM=Red,Green,Blue,Yellow,White,Black]
+elseif []
+el[se sdsdf
+[endif
+]qwer
+select [ENUM]
+point 3 set [INT]
+установить день недели [ENUM=,Вторник,Среда]
+выбор [ENUM=]

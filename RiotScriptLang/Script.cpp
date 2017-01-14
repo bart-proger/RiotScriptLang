@@ -1,6 +1,7 @@
 #include "Script.h"
 #include <fstream>
 #include "string_utils.h"
+#include <iostream>
 
 
 std::vector<CommandTemplate> Script::templates;
@@ -36,14 +37,16 @@ bool Script::loadCommandTemplates(string fileName)
 
 	std::ifstream f(fileName);
 	string line;
-	while (std::getline(f, line))
+	for (long ln = 1; std::getline(f, line); ++ln)
 	{
 		string_trim(line, " ");
 		if (line.empty())
 			continue;
+std::cout << ln << ": " << line << ";\n";
 		CommandTemplate tmp(line);
-// 		if (!tmp.bad())
-// 			templates.push_back(tmp);
+std::cin.get();
+ 		if (!tmp.bad())
+ 			templates.push_back(tmp);
 	}
 
 	return true;

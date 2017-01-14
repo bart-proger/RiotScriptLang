@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
 	setlocale(LC_ALL, "Russian");
 	std::cout << "Run script file>: ";
 	std::cout << "script.txt";
+	std::cin.get();
 
 	Script::loadCommandTemplates("commands.txt");
 
