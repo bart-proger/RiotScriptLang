@@ -10,7 +10,7 @@ string error;
 
 CommandTemplate::CommandTemplate(string line):
 	bad_(false)
-{	
+{
 	std::stringstream ss(line);
 
 	if (!parseCmdTemplate(ss))
@@ -21,7 +21,7 @@ CommandTemplate::CommandTemplate(string line):
 #ifdef _DEBUG
 	else
 	{
-		std::cout << "\n---template:\n  \"" << template_ << "\"\n";
+		std::cout << "\n---template:\n  \"" << cmdTemplate_ << "\"\n";
 		std::cout << "---types:\n";
 		for (auto typ : argsTypes_)
 		{
@@ -52,23 +52,29 @@ CommandTemplate::CommandTemplate(string line):
 
 bool CommandTemplate::parseCmdTemplate(std::stringstream& ss)
 {
-	char c;
+	char c = 0, prevC;
 	for (;;)
 	{
+		prevC = c;
 		c = ss.get();
 		if (ss.eof())
 			break;
 		
 		if (isalpha((unsigned char)c) || c == ' ')
 		{
-			template_ += c;
+			cmdTemplate_ += c;
 		}
 		else if (c == '[')
 		{
+			if (prevC != 0 && prevC != ' ')
+			{
+				error = "ќтсутствует разделитель перед параметром!";
+				return false;
+			}
 			if (!parseArgType(ss))
 				return false;
 			else
-				template_ += '*';
+				cmdTemplate_ += '*';
 			c = ss.get();
 			if (ss.eof())
 			{

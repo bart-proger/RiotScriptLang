@@ -3,7 +3,7 @@
 привет кириллица [ENUM=русский]
 [qwerty
 здоровье [INT
-9spawn [ENUM=Player,Enemy,Boss] at [FLOAT][FLOAT][FLOAT]
+spawn [ENUM=Player,Enemy,Boss] at [FLOAT][FLOAT][FLOAT]
 hit [ENUM=Player,Enemy,Boss] by [INT] points
 rand [INT=йй:100ю]
 rotate [FLOAT=-3.14:3.14]

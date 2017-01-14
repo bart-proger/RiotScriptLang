@@ -48,6 +48,12 @@ std::cin.get();
  		if (!tmp.bad())
  			templates.push_back(tmp);
 	}
+#ifdef _DEBUG
+	for (const auto& t : templates)
+	{
+		std::cout << t.cmdTemplate() << '\n';
+	}
+#endif
 
 	return true;
 }

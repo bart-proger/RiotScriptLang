@@ -15,8 +15,8 @@ Command::Command(string scriptLine, long lineNumber):
 		if (token == "print")
 		{
 			func_ = func_Print;
-			FuncArg a;
-			a.type = FuncArg::ArgType::TEXT;
+			ArgValue a;
+			a.type = StdType::TEXT;
 			//TODO: разбор выражений текстовых, численных, логических
 			if (std::getline(ss, token))
 				a.value = token;
@@ -37,7 +37,7 @@ void Command::execute()
 		func_(args_);
 }
 
-void Command::func_Print(std::vector<FuncArg> &args)
+void Command::func_Print(std::vector<ArgValue> &args)
 {
 	std::cout << args[0].value << std::endl;
 }

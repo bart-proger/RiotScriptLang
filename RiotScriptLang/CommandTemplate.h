@@ -30,7 +30,8 @@ struct ArgType
 class CommandTemplate
 {
 public:
-	bool bad() { return bad_; }
+	bool bad() const { return bad_; }
+	const string& cmdTemplate() const { return cmdTemplate_; }
 public:
 	CommandTemplate(string line);
 	bool parseCmdTemplate(std::stringstream& ss);
@@ -39,7 +40,7 @@ public:
 	bool parseFloatRange(std::stringstream& ss);
 	bool parseEnumValues(std::stringstream& ss);
 private:
-	string template_;
+	string cmdTemplate_;
 	std::vector<ArgType> argsTypes_;
 	bool bad_;
 };

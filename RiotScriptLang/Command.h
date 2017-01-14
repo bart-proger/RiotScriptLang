@@ -2,14 +2,14 @@
 #include <vector>
 #include <string>
 using std::string;
+#include "CommandTemplate.h"
 
 class Command
 {
 public:
-	struct FuncArg
+	struct ArgValue
 	{
-		enum ArgType { NONE = 0, BOOL, INT, FLOAT, TEXT, ENUM }; //LIST - список аргументов
-		ArgType type;
+		StdType type;
 		string value;
 		union
 		{
@@ -19,18 +19,18 @@ public:
 			long enumValueNum;
 		};
 
-		FuncArg() : type(NONE), value(""), intValue(0) 
+		ArgValue() : type(NONE), value(""), intValue(0) 
 		{}
 	};
-	typedef void (*Function)(std::vector<FuncArg> &args);
+	typedef void (*Function)(std::vector<ArgValue> &args);
 
  	Command(string scriptLine, long lineNumber);
 	void execute();
 
 private:
-	static void func_Print(std::vector<FuncArg> &args);
+	static void func_Print(std::vector<ArgValue> &args);
 
 	Function func_;
-	std::vector<FuncArg> args_;
+	std::vector<ArgValue> args_;
 	long lineNumber_;
 };
