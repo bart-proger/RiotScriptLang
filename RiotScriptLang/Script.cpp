@@ -42,8 +42,8 @@ bool Script::loadCommandTemplates(string fileName)
 		if (line.empty())
 			continue;
 		CommandTemplate tmp(line);
-		if (!tmp.bad())
-			templates.push_back(tmp);
+// 		if (!tmp.bad())
+// 			templates.push_back(tmp);
 	}
 
 	return true;

@@ -3,10 +3,14 @@
 #include <string>
 using std::string;
 
+
+enum StdType { NONE = 0, BOOL, INT, FLOAT, TEXT, ENUM };
+const char* STD_TYPE_NAMES[];
+
+
 struct ArgType
 {
-	enum VarType { NONE = 0, BOOL, INT, FLOAT, TEXT, ENUM }; //LIST - список из нескольких аргументов
-	VarType type;
+	StdType type;
 	bool bounded;
 	union
 	{
@@ -29,9 +33,11 @@ public:
 	bool bad() { return bad_; }
 public:
 	CommandTemplate(string line);
+	bool parseCmdTemplate(std::stringstream& ss);
+	bool parseArgType(std::stringstream& ss);
+	bool parseIntRange(std::stringstream& ss);
 private:
 	std::vector<string> tokens_;
 	std::vector<ArgType> argsTypes_;
 	bool bad_;
 };
-
